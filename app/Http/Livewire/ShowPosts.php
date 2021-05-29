@@ -12,6 +12,8 @@ class ShowPosts extends Component
 	use WithPagination;			//clase para paginar en Livewire
 
     public $search;					//propiedad que va a estar vinculada(cableada) al campo de busqueda
+    public $sort = 'id';
+    public $direction = 'asc';
 
     public function updatingSearch(){   //se ejecuta automaticamente cada vez que cambia la vble $search
         $this->resetPage();             //en cada busqueda vuelve a la pagina 1
@@ -21,9 +23,26 @@ class ShowPosts extends Component
     {
     	$posts = Post::where('title', 'like', '%' . $this->search . '%')
     				->orWhere('content', 'like', '%' . $this->search . '%')
+    				->orderBy($this->sort, $this->direction)
     				->paginate();
 
 
         return view('livewire.show-posts', compact('posts'));
+    }
+
+    public function order( $sort)
+    {
+    	if($this->sort == $sort)
+    	{
+    		if($this->direction == 'asc')
+    			$this->direction = 'desc';
+    		else
+    			$this->direction = 'asc';
+    	}
+    	else
+    	{
+	   		$this->sort = $sort;
+   			$this->direction == 'asc';
+    	}
     }
 }

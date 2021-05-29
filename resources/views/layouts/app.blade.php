@@ -13,6 +13,8 @@
         <!-- Styles -->
         {{-- <link rel="stylesheet" href="{{ asset('css/app.css') }}"> este funciona sin problemas--}}
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">    {{-- supuestamente va este --}}
+        {{-- iconos y estilos bajados de https://fontawesome.com/download --}}
+        <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
 
         {{--slot para definir estilos desde plantillas. Es para que funcione Dropzone, etc. --}}
         @if (isset($mi_css))
