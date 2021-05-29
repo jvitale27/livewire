@@ -31,7 +31,7 @@
 
         <div class="min-h-screen bg-gray-100">
 
-<!-- instancio el componente de livewire 'Navigation' que esta en la carpeta App\Http\Livewire\Navigation.php -->
+<!-- instancio el componente de livewire 'navigation-menu' que esta en views\navigation-menu.blade.php -->
             @livewire('navigation-menu')
 
             <!-- Page Heading -->
