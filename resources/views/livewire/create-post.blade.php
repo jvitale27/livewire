@@ -13,20 +13,56 @@
 
     	<x-slot name="content">
     		<div class="mb-4">
+
+                {{-- cartel extraido de https://v1.tailwindcss.com/components/alerts y modificado --}}
+                {{-- mensaje mientras se esta cargando de fondo la propiedad 'image' --}}
+                <div wire:loading wire:target="image" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                  <strong class="font-bold">Cargando imagen...</strong>
+                  <span class="block sm:inline">Por favor espere hasta que se cargue la imagen</span>
+                </div>
+
+                {{-- si hay una imagen ya seleccionada, la muestro arriba desde la carpeta temporaria de livewire que es public/storage/livewire-tmp/ --}}
+                @if ($image)
+                    <img src="{{ $image->temporaryUrl() }}" class="mb-4">
+                @endif
+
     			<x-jet-label>
     				Titulo del post
     			</x-jet-label>
     			{{--texto cableado a la vble 'title'. defer para no renderizar con cada caracter escrito--}}
-    			<x-jet-input type="text" class="w-full mb-4" wire:model.defer="title">
+    			<x-jet-input type="text" class="w-full" wire:model.defer="title">
     			</x-jet-input>
 
-    			<x-jet-label>
+                {{-- @error('title')
+                    <span>
+                        {{ $message }}
+                    </span>
+                @enderror --}}
+                <x-jet-input-error for="title"></x-jet-input-error>     {{-- mediante componente jetstream --}}
+
+    			<x-jet-label class="mt-4">
     				Contenido del post
     			</x-jet-label>
     			{{--'form-control' lo defini en view/css/form.css--}}
     			{{-- texto cableado a la vble 'content'. defer para no renderizar con cada caracter escrito--}}
     			<textarea class="form-control w-full" rows="6" wire:model.defer="content">
     			</textarea> 
+
+                {{-- @error('content')
+                    <span>
+                        {{ $message }}
+                    </span>
+                @enderror --}}
+                <x-jet-input-error for="content"></x-jet-input-error>   {{-- mediante componente jetstream --}}
+
+                {{-- seleccion de archivo de imagen --}}
+                <div class="mt-4">
+                    {{-- el '$identificador' es para que livewire lo refresque y resetee --}}
+                    <input type="file" wire:model="image" id="{{ $identificador }}">
+
+                    <x-jet-input-error for="image"></x-jet-input-error>
+                </div>
+
     		</div>
     	</x-slot>
 
@@ -36,10 +72,25 @@
     			Cancelar
     		</x-jet-secondary-button>
 
-    		{{-- boton de comp. jetstream que ejecuta metodo 'save' para guardar post--}}
-    		<x-jet-danger-button wire:click="save">
+    		{{-- boton de comp. jetstream que completa metodo 'save' para guardar post. --}}
+            {{-- Se oculta mientras se completa el metodo 'save' --}}
+    		{{-- <x-jet-danger-button wire:click="save" wire:loading.remove wire:target="save"> --}}
+            {{-- cambia de color mientras se completa el metodo 'save' --}}
+            {{-- <x-jet-danger-button wire:click="save" wire:loading.class="bg-blue-500" wire:target="save"> --}}
+            {{-- deshabilitado y opaco mientras se completan el metodo 'save' y la prop. 'image' --}}
+            <x-jet-danger-button wire:click="save" wire:loading.attr="disabled" class="disabled:opacity-25" wire:target="save, image">
     			Guardar
     		</x-jet-danger-button>
+
+            {{-- mensaje mientras se esta completando una accion de fondo, por ej. save --}}
+            {{-- <span wire:loading>Cargando...</span>  --}}          {{-- cualquier metodo o demora --}}
+            <span wire:loading wire:target="save">Cargando...</span>    {{-- solo el metodo save --}}
+            {{-- con distintos displays
+            <span wire:loading.flex wire:target="save">Cargando...</span>
+            <span wire:loading.grid wire:target="save">Cargando...</span>
+            <span wire:loading.inline wire:target="save">Cargando...</span>
+            <span wire:loading.table wire:target="save">Cargando...</span> --}}
+
     	</x-slot>
     </x-jet-dialog-modal>
 </div>
