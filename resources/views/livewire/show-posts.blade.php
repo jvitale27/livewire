@@ -12,9 +12,12 @@
 	    <x-table>
 
 			{{-- input buscar lo vinculo(enlazo) con la propiedad 'search' --}}
-	    	<div class="px-6 py-4">
-	    		<x-jet-input type="text" wire:model="search" class="w-full" placeholder="Escriba lo que quiere buscar">
+	    	<div class="px-6 py-4 flex items-center">
+	    		<x-jet-input type="text" wire:model="search" class="flex-1 mr-4" placeholder="Escriba lo que quiere buscar">
 	    		</x-jet-input>	{{-- componente de jettream --}}
+
+	    		{{-- instancio al componente livewire app/Http/Livewire/CreatePost.php --}}
+	    		@livewire('create-post')
 	    	</div>
 
     		@if ($posts->count())
@@ -22,7 +25,7 @@
 		          <thead class="bg-gray-50">
 		            <tr>
 		            {{-- a cada titulo le agrego click y el metodo para ordenar las listas --}}
-		              <th scope="col" wire:click="order('id')" class="w-20 cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+		              <th scope="col" wire:click="order('id')" class="w-24 cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 		                ID
 		                {{-- ordenamiento --}}
 		                @if ($sort == 'id')

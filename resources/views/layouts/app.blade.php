@@ -26,6 +26,8 @@
         <!-- Scripts. -->
         {{-- <script src="{{ asset('js/app.js') }}" defer></script> este funciona sin problemas--}} 
         <script src="{{ mix('js/app.js') }}" defer></script>    {{-- supuestamente va este --}}
+        {{-- include de cualquier cuadro de dialog desde https://sweetalert2.github.io/ --}}
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     </head>
     <body class="font-sans antialiased">
@@ -59,6 +61,18 @@
         @if (isset($mi_js))
             {{ $mi_js }}        {{-- slot para ejecutar scripts desde cualquier plantilla --}}
         @endif
+
+        <script>
+            {{-- escucho el evento 'alert' y levanto cartel de https://sweetalert2.github.io/ --}}
+            Livewire.on('alert', function( message){
+                Swal.fire(
+                    'Guardado!',
+                    message,
+                    'success'                       {{-- icono --}}
+                )
+            })
+        </script>
+
 
     </body>
 </html>

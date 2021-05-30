@@ -13,7 +13,11 @@ class ShowPosts extends Component
 
     public $search;					//propiedad que va a estar vinculada(cableada) al campo de busqueda
     public $sort = 'id';
-    public $direction = 'asc';
+    public $direction = 'desc';
+
+    protected $listeners = ['render1' => 'render'];     //escucho los eventos y ejecuto metodos
+                                                        //render1 lo emite CreatePost
+//    protected $listeners = ['render'];     //si el evento y el metodo se llaman igual solo pongo uno
 
     public function updatingSearch(){   //se ejecuta automaticamente cada vez que cambia la vble $search
         $this->resetPage();             //en cada busqueda vuelve a la pagina 1
