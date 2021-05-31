@@ -5,13 +5,13 @@ namespace App\Http\Livewire;
 use App\Models\Post;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
-use Livewire\WithFileUploads;
-use Livewire\WithPagination;       //para poder subir imagenes desde componente de Livewire
+use Livewire\WithFileUploads;           //para poder subir imagenes desde componente de Livewire
+use Livewire\WithPagination;            //clase para paginar en Livewire
 
 
 class ShowPosts extends Component
 {
-	use WithPagination;			//clase para paginar en Livewire
+	use WithPagination;			//clase para paginar en Livewire, solo refresca este componente
 
     public $search;					//propiedad que va a estar vinculada(cableada) al campo de busqueda
     public $sort = 'id';
@@ -49,7 +49,9 @@ class ShowPosts extends Component
                                                         //render1 lo emite CreatePost
 //    protected $listeners = ['render'];     //si el evento y el metodo se llaman igual solo pongo uno
 
-    public function updatingSearch(){   //se ejecuta automaticamente cada vez que cambia la vble $search
+//  public function updating(){       //se ejecuta automaticamente cada vez que cambia de valor cualquier propiedad
+//  public function updatingPost(){   //se ejecuta automaticamente cada vez que cambia de valor la propiedad $post
+    public function updatingSearch(){   //se ejecuta automaticamente cada vez que cambia la propiedad $search
         $this->resetPage();             //en cada busqueda vuelve a la pagina 1
     }
 

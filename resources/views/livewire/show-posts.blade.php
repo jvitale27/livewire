@@ -84,7 +84,7 @@
 			                <div class="text-sm text-gray-900">{{ $post1->content }}</div>
 			              </td>
 			              {{-- boton y link editar --}}
-			              <td class="px-6 py-4 text-sm font-medium">
+			              <td class="px-6 py-4 text-sm font-medium float-right">
 
 	    					{{-- Componente de anidamiento. Instancio reiteradas veces al componente livewire app/Http/Livewire/EditPost.php. La llave (key) debe existir y ser unica para que livewire pueda diferenciar un llamado de otro--}}
 	    					{{-- @livewire('edit-post', ['post' => $post1], key($post1->id)) --}}
@@ -109,7 +109,12 @@
 
 	    </x-table>
 
-	    {{ $posts->links() }} 		{{-- muestro paginado --}}
+	    {{-- si hay paginas muestro links --}}
+	    @if ($posts->hasPages())
+		    <div class="px-6 py-3">
+		    	{{ $posts->links() }} 		{{-- muestro paginado --}}
+		    </div>
+	    @endif
 
     </div>
 
