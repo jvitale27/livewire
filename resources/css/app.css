@@ -2,4 +2,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
+/* mis estilos */
 @import 'form.css';
+@import 'buttons.css';

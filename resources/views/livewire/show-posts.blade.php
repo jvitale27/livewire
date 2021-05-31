@@ -16,6 +16,7 @@
 	    		<x-jet-input type="text" wire:model="search" class="flex-1 mr-4" placeholder="Escriba lo que quiere buscar">
 	    		</x-jet-input>	{{-- componente de jettream --}}
 
+	    		{{-- boton de crear nuevo post --}}
 	    		{{-- instancio al componente livewire app/Http/Livewire/CreatePost.php --}}
 	    		@livewire('create-post')
 	    	</div>
@@ -27,7 +28,7 @@
 		            {{-- a cada titulo le agrego click y el metodo para ordenar las listas --}}
 		              <th scope="col" wire:click="order('id')" class="w-24 cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 		                ID
-		                {{-- ordenamiento --}}
+		                {{-- ordenamiento. las clases 'fas fa-sort-' son desde vendor/fontawesome-free/--}}
 		                @if ($sort == 'id')
 		                	@if ($direction == 'asc')
 				                <i class="fas fa-sort-alpha-up-alt float-right mt-1"></i>
@@ -40,7 +41,7 @@
 		              </th>
 		              <th scope="col" wire:click="order('title')" class="cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 		                Title
-		                {{-- ordenamiento --}}
+		                {{-- ordenamiento. las clases 'fas fa-sort-' son desde vendor/fontawesome-free/ --}}
 		                @if ($sort == 'title')
 		                	@if ($direction == 'asc')
 				                <i class="fas fa-sort-alpha-up-alt float-right mt-1"></i>
@@ -53,7 +54,7 @@
 		              </th>
 		              <th scope="col" wire:click="order('content')" class="cursor-pointer px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
 		                Content
-		                {{-- ordenamiento --}}
+		                {{-- ordenamiento. las clases 'fas fa-sort-' son desde vendor/fontawesome-free/ --}}
 		                @if ($sort == 'content')
 		                	@if ($direction == 'asc')
 				                <i class="fas fa-sort-alpha-up-alt float-right mt-1"></i>
@@ -82,8 +83,11 @@
 			              <td class="px-6 py-4">
 			                <div class="text-sm text-gray-900">{{ $post->content }}</div>
 			              </td>
-			              <td class="px-6 py-4 text-right text-sm font-medium">
-			                <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+			              <td class="px-6 py-4 text-sm font-medium">
+
+	    					{{-- Componente de anidamiento. Instancio reiteradas veces al componente livewire app/Http/Livewire/EditPost.php. La llave (key) debe existir y ser unica para que livewire pueda diferenciar un llamado de otro--}}
+	    					@livewire('edit-post', ['post' => $post], key($post->id))
+
 			              </td>
 			            </tr>
 					@endforeach
@@ -98,7 +102,7 @@
 
 	    </x-table>
 
-	    {{ $posts->links() }}
+	    {{ $posts->links() }} 		{{-- muestro paginado --}}
 
     </div>
 </div>
