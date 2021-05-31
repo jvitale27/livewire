@@ -75,24 +75,24 @@
     			Cancelar
     		</x-jet-secondary-button>
 
-    		{{-- boton de comp. jetstream que completa metodo 'save' para guardar post. --}}
-            {{-- Se oculta mientras se completa el metodo 'save' --}}
-    		{{-- <x-jet-danger-button wire:click="save" wire:loading.remove wire:target="save"> --}}
-            {{-- cambia de color mientras se completa el metodo 'save' --}}
-            {{-- <x-jet-danger-button wire:click="save" wire:loading.class="bg-blue-500" wire:target="save"> --}}
-            {{-- deshabilitado y opaco mientras se completan el metodo 'save' y la prop. 'image' --}}
-            <x-jet-danger-button wire:click="save" wire:loading.attr="disabled" class="disabled:opacity-25" wire:target="save, image">
+    		{{-- boton de comp. jetstream que completa metodo 'update' para guardar post. --}}
+            {{-- Se oculta mientras se completa el metodo 'update' --}}
+    		{{-- <x-jet-danger-button wire:click="update" wire:loading.remove wire:target="update"> --}}
+            {{-- cambia de color mientras se completa el metodo 'update' --}}
+            {{-- <x-jet-danger-button wire:click="update" wire:loading.class="bg-blue-500" wire:target="update"> --}}
+            {{-- deshabilitado y opaco mientras se completan el metodo 'update' y la prop. 'image' --}}
+            <x-jet-danger-button wire:click="update" wire:loading.attr="disabled" class="disabled:opacity-25" wire:target="update, image">
     			Guardar
     		</x-jet-danger-button>
 
-            {{-- mensaje mientras se esta completando una accion de fondo, por ej. save --}}
+            {{-- mensaje mientras se esta completando una accion de fondo, por ej. update --}}
             {{-- <span wire:loading>Cargando...</span>  --}}          {{-- cualquier metodo o demora --}}
-            <span wire:loading wire:target="save">Cargando...</span>    {{-- solo el metodo save --}}
+            <span wire:loading wire:target="update">Cargando...</span>    {{-- solo el metodo update --}}
             {{-- con distintos displays
-            <span wire:loading.flex wire:target="save">Cargando...</span>
-            <span wire:loading.grid wire:target="save">Cargando...</span>
-            <span wire:loading.inline wire:target="save">Cargando...</span>
-            <span wire:loading.table wire:target="save">Cargando...</span> --}}
+            <span wire:loading.flex wire:target="update">Cargando...</span>
+            <span wire:loading.grid wire:target="update">Cargando...</span>
+            <span wire:loading.inline wire:target="update">Cargando...</span>
+            <span wire:loading.table wire:target="update">Cargando...</span> --}}
 
     	</x-slot>
     </x-jet-dialog-modal>

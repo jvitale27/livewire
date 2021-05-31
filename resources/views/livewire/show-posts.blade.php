@@ -72,21 +72,28 @@
 		          </thead>
 
 		          <tbody class="bg-white divide-y divide-gray-200">
-					@foreach ($posts as $post)
+					@foreach ($posts as $post1)
 			            <tr>
 			              <td class="px-6 py-4">
-			                <div class="text-sm text-gray-900">{{ $post->id }}</div>
+			                <div class="text-sm text-gray-900">{{ $post1->id }}</div>
 			              </td>
 			              <td class="px-6 py-4">
-			                <div class="text-sm text-gray-900">{{ $post->title }}</div>
+			                <div class="text-sm text-gray-900">{{ $post1->title }}</div>
 			              </td>
 			              <td class="px-6 py-4">
-			                <div class="text-sm text-gray-900">{{ $post->content }}</div>
+			                <div class="text-sm text-gray-900">{{ $post1->content }}</div>
 			              </td>
+			              {{-- boton y link editar --}}
 			              <td class="px-6 py-4 text-sm font-medium">
 
 	    					{{-- Componente de anidamiento. Instancio reiteradas veces al componente livewire app/Http/Livewire/EditPost.php. La llave (key) debe existir y ser unica para que livewire pueda diferenciar un llamado de otro--}}
-	    					@livewire('edit-post', ['post' => $post], key($post->id))
+	    					{{-- @livewire('edit-post', ['post' => $post1], key($post1->id)) --}}
+
+	    					{{-- el utilizar componentes de anidamiento no resulta optimizado, ya que se crea un componente+modal+... por cada elemento del listado de posts. Podemos hacer algo mas optimizado instanciando un metodo y pasandole la informacion del post correspondiente. Creamos un solo modal al final de este codigo --}}
+	    					{{-- en este caso instancio directamente el metodo 'edit' y le paso el 'post1' --}}
+							<a class="btn1 btn1-green" wire:click="edit( {{ $post1 }})">	{{-- clase agregada --}}
+								<i class="fas fa-edit"></i>  {{-- icono de editar desde vendor/fontawesome-free/--}}
+							</a>
 
 			              </td>
 			            </tr>
@@ -105,4 +112,103 @@
 	    {{ $posts->links() }} 		{{-- muestro paginado --}}
 
     </div>
+
+<!--=====================================
+=            Section comment            =
+======================================-->
+{{-- modal que se muestra si 'open'==true. Esta cableado a la variable.
+Lo pongo aca para el caso de NO utilizar componentes de anidamiento, sino se saca de aqui --}}
+    <x-jet-dialog-modal wire:model="open_edit">
+
+    	<x-slot name="title">
+    		Editar post '{{ $post->title }}'
+    	</x-slot>
+
+    	<x-slot name="content">
+    		<div class="mb-4">
+
+                {{-- cartel extraido de https://v1.tailwindcss.com/components/alerts y modificado --}}
+                {{-- mensaje mientras se esta cargando de fondo la propiedad 'image' --}}
+                <div wire:loading wire:target="image" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                  <strong class="font-bold">Cargando imagen...</strong>
+                  <span class="block sm:inline">Por favor espere hasta que se cargue la imagen</span>
+                </div>
+
+				{{-- si hay una imagen ya seleccionada, la muestro arriba desde la carpeta temporaria de livewire que es public/storage/livewire-tmp/, aunque este link apunta a http://livewire.test/livewire/preview-file/, en fin--}}
+                @if( $image)
+                    <img src="{{ $image->temporaryUrl() }}" class="mb-4">
+                @elseif ($post->image) 						{{-- sino muestro imagen del post --}}
+                    <img src="{{ Storage::url($post->image) }}" class="mb-4">
+                @endif
+
+    			<x-jet-label>
+    				Titulo del post
+    			</x-jet-label>
+    			{{--texto cableado a 'post.title'. defer para no renderizar con cada caracter escrito--}}
+    			<x-jet-input type="text" class="w-full" wire:model.defer="post.title"></x-jet-input>
+
+                @error('title')
+                    <span>
+                        {{ $message }}
+                    </span>
+                @enderror
+                <x-jet-input-error for="post.title"></x-jet-input-error> {{--mediante componente jetstream--}}
+
+    			<x-jet-label class="mt-4">
+    				Contenido del post
+    			</x-jet-label>
+    			{{--'form-control' lo defini en view/css/form.css--}}
+    			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
+    			<textarea class="form-control w-full" rows="6" wire:model.defer="post.content">
+    				{{ $post->content }}
+    			</textarea> 
+
+                {{-- @error('content')
+                    <span>
+                        {{ $message }}
+                    </span>
+                @enderror --}}
+                <x-jet-input-error for="post.content"></x-jet-input-error> {{--mediante componente jetstream--}}
+
+                {{-- seleccion de archivo de imagen --}}
+                <div class="mt-4">
+                    {{-- el '$identificador' es para que livewire lo refresque y resetee --}}
+                    <input type="file" wire:model="image" id="{{ $identificador }}" accept="image/*">
+
+                    <x-jet-input-error for="image"></x-jet-input-error>
+                </div>
+
+    		</div>
+    	</x-slot>
+
+    	<x-slot name="footer">
+    		{{-- boton de comp. jetstream ejecuta un metodo para cambiar el valor de la vble 'open_edit' --}}
+    		<x-jet-secondary-button wire:click="$set('open_edit', false)">
+    			Cancelar
+    		</x-jet-secondary-button>
+
+    		{{-- boton de comp. jetstream que completa metodo 'update' para guardar post. --}}
+            {{-- Se oculta mientras se completa el metodo 'update' --}}
+    		{{-- <x-jet-danger-button wire:click="update" wire:loading.remove wire:target="update"> --}}
+            {{-- cambia de color mientras se completa el metodo 'update' --}}
+            {{-- <x-jet-danger-button wire:click="update" wire:loading.class="bg-blue-500" wire:target="update"> --}}
+            {{-- deshabilitado y opaco mientras se completan el metodo 'update' y la prop. 'image' --}}
+            <x-jet-danger-button wire:click="update" wire:loading.attr="disabled" class="disabled:opacity-25" wire:target="update, image">
+    			Guardar
+    		</x-jet-danger-button>
+
+            {{-- mensaje mientras se esta completando una accion de fondo, por ej. update --}}
+            {{-- <span wire:loading>Cargando...</span>  --}}          {{-- cualquier metodo o demora --}}
+            <span wire:loading wire:target="update">Cargando...</span>    {{-- solo el metodo update --}}
+            {{-- con distintos displays
+            <span wire:loading.flex wire:target="update">Cargando...</span>
+            <span wire:loading.grid wire:target="update">Cargando...</span>
+            <span wire:loading.inline wire:target="update">Cargando...</span>
+            <span wire:loading.table wire:target="update">Cargando...</span> --}}
+
+    	</x-slot>
+    </x-jet-dialog-modal>
+
+<!--====  End of Section comment  ====-->
+
 </div>

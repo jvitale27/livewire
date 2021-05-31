@@ -46,7 +46,7 @@ class CreatePost extends Component
 		//si hay una imagen ya seleccionada, deberia borar la imagen o la carpeta temporaria de livewire que es public/storage/livewire-tmp/, aunque este link $this->image->temporaryUrl() apunta a http://livewire.test/livewire/preview-file/, en fin
 		//Storage::delete( $this->image->temporaryUrl());	no funciono por el link
 		//entonce borro la carpeta public/storage/livewire-tmp donde almaceno imagenes temporarias
-		Storage::deleteDirectory('livewire-tmp');
+		Storage::deleteDirectory('livewire-tmp');	// OJO!!! si hay multiusuarios esto esta mal. No borrar la carpeta
 
 		Post::create([
 			'title'   => $this->title,

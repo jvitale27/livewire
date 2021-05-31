@@ -24,7 +24,8 @@ class EditPost extends Component
 		$this->identificador = rand();			//identificador aleatorio
 	}
 
-	//reglas de validacion de datos
+	//reglas de validacion de datos.
+    //Deben existir ademas para poder sincronizar mediante wire:model="post.title" etc., sino no funciona
 	protected $rules = [
 		'post.title'   => 'required|max:100',
 		'post.content' => 'required|max:100',
@@ -37,7 +38,7 @@ class EditPost extends Component
 		$this->validateOnly( $propertyName);	//solo valida la propiedad que estoy modificando
 	}*/
 
-	public function save()
+	public function update()
 	{
 
 		$this->validate();			//validacion de datos segun las reglas establecidas
@@ -53,7 +54,7 @@ class EditPost extends Component
 			//si hay una imagen ya seleccionada, deberia borar la imagen o la carpeta temporaria de livewire que es public/storage/livewire-tmp/, aunque este link $this->image->temporaryUrl() apunta a http://livewire.test/livewire/preview-file/, en fin
 			//Storage::delete( $this->image->temporaryUrl());	no funciono por el link
 			//entonce borro la carpeta public/storage/livewire-tmp donde almaceno imagenes temporarias
-			Storage::deleteDirectory('livewire-tmp');
+			Storage::deleteDirectory('livewire-tmp');  // OJO!!! si hay multiusuarios esto esta mal. No borrar la carpeta.
 		}
 
 		$this->post->save();
