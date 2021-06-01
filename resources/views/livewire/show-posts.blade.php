@@ -3,7 +3,8 @@
 <div>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{-- {{ __('Dashboard') }} --}}
+            Listado de posts
         </h2>
     </x-slot>
 
@@ -11,9 +12,23 @@
     	{{-- instancio al componente para armar la tabla --}}
 	    <x-table>
 
-			{{-- input buscar lo vinculo(enlazo) con la propiedad 'search' --}}
 	    	<div class="px-6 py-4 flex items-center">
-	    		<x-jet-input type="text" wire:model="search" class="flex-1 mr-4" placeholder="Escriba lo que quiere buscar">
+	    		{{-- selector de cantidad a mostrar --}}
+	    		<div class="flex items-center">
+	    			<span>Mostrar</span>
+
+	    			<select wire:model="cantidad" class="mx-2 form-control">	{{-- form-control lo defini yo --}}
+	    				<option value="5">5</option>
+	    				<option value="10">10</option>
+	    				<option value="15">15</option>
+	    				<option value="20">20</option>
+	    			</select>
+
+	    			<span>registros</span>
+	    		</div>
+
+				{{-- input buscar lo vinculo(enlazo) con la propiedad 'search' --}}
+	    		<x-jet-input type="text" wire:model="search" class="flex-1 mx-4" placeholder="Escriba lo que quiere buscar">
 	    		</x-jet-input>	{{-- componente de jettream --}}
 
 	    		{{-- boton de crear nuevo post --}}
@@ -107,14 +122,14 @@
 
     		@endif
 
-	    </x-table>
+		    {{-- si hay paginas muestro links --}}
+		    @if ($posts->hasPages())
+			    <div class="px-6 py-3">
+			    	{{ $posts->links() }} 		{{-- muestro paginado --}}
+			    </div>
+		    @endif
 
-	    {{-- si hay paginas muestro links --}}
-	    @if ($posts->hasPages())
-		    <div class="px-6 py-3">
-		    	{{ $posts->links() }} 		{{-- muestro paginado --}}
-		    </div>
-	    @endif
+	    </x-table>
 
     </div>
 

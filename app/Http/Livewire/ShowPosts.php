@@ -13,9 +13,22 @@ class ShowPosts extends Component
 {
 	use WithPagination;			//clase para paginar en Livewire, solo refresca este componente
 
-    public $search;					//propiedad que va a estar vinculada(cableada) al campo de busqueda
+    public $search = '';					//propiedad que va a estar vinculada(cableada) al campo de busqueda
     public $sort = 'id';
     public $direction = 'desc';
+    public $cantidad = 10;          //cantidad de registros a mostrar 
+
+
+    //este arreglo permite definir que propiedades 'viajan' o se 'agregan' a la url de la pagina cada vez que se refresca el componente. No es necesario pero sirve para compartir la busqueda determinada con otra persona
+    protected $queryString = [
+        'cantidad',
+//      'cantidad' => ['except' => 10],         //excluir cuando tiene un valor predeterminado
+        'sort',
+//      'sort' => ['except' => 'desc'],         //excluir cuando tiene un valor predeterminado
+        'direction',
+//      'search',
+    ];
+
 
 /*=============================================
 =            Section comment block            =
@@ -55,12 +68,14 @@ class ShowPosts extends Component
         $this->resetPage();             //en cada busqueda vuelve a la pagina 1
     }
 
+
+    //funcion que se ejecuta automaticamente al invocar esta clase.
     public function render()
     {
     	$posts = Post::where('title', 'like', '%' . $this->search . '%')
     				->orWhere('content', 'like', '%' . $this->search . '%')
     				->orderBy($this->sort, $this->direction)
-    				->paginate();
+    				->paginate( $this->cantidad);
 
 
         return view('livewire.show-posts', compact('posts'));
