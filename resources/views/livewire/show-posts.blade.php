@@ -1,6 +1,7 @@
 {{-- como este componente de livewire lo utilizo de controlador de rutas en web.php, siempre se instancia la vista principal layouts/app.blade.php antes de esta propia vista, por lo tanto estoy dentro del componente <x-app-layout> --}}
 {{-- Las view de Livewire SIEMPRE deben estar encerradas en un solo div padre, no puede haber mas de uno --}}
-<div>
+
+<div wire:init="loadPosts">				{{-- invoco el metodo para iniciar carga de los registros de la DB --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{-- {{ __('Dashboard') }} --}}
@@ -36,7 +37,8 @@
 	    		@livewire('create-post')
 	    	</div>
 
-    		@if ($posts->count())
+    		{{-- @if ($posts->count()) --}}  {{-- este no puede utilizarse en inicio retrasado readyToLoad porque no existe posts como arreglo de Post --}}
+    		@if ( count( $posts))						{{-- este metodo de php si se puede utilizar --}}
 		        <table class="min-w-full divide-y divide-gray-200">
 		          <thead class="bg-gray-50">
 		            <tr>
@@ -115,19 +117,20 @@
 					@endforeach
 		          </tbody>
 		        </table>
+
+			    {{-- si hay paginas muestro links --}}
+			    @if ($posts->hasPages())
+				    <div class="px-6 py-3">
+				    	{{ $posts->links() }} 		{{-- muestro paginado --}}
+				    </div>
+			    @endif
+
 			@else
 		    	<div class="px-6 py-4">
 		    		No existe ninigun registro coincidente.
 		    	</div>
 
     		@endif
-
-		    {{-- si hay paginas muestro links --}}
-		    @if ($posts->hasPages())
-			    <div class="px-6 py-3">
-			    	{{ $posts->links() }} 		{{-- muestro paginado --}}
-			    </div>
-		    @endif
 
 	    </x-table>
 

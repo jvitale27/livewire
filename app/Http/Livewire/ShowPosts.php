@@ -16,7 +16,8 @@ class ShowPosts extends Component
     public $search = '';					//propiedad que va a estar vinculada(cableada) al campo de busqueda
     public $sort = 'id';
     public $direction = 'desc';
-    public $cantidad = 10;          //cantidad de registros a mostrar 
+    public $cantidad = 10;          //cantidad de registros a mostrar
+    public $readyToLoad = false;    //para atrasar la consulta y mostrar el frame sin esta concluida
 
 
     //este arreglo permite definir que propiedades 'viajan' o se 'agregan' a la url de la pagina cada vez que se refresca el componente. No es necesario pero sirve para compartir la busqueda determinada con otra persona
@@ -40,11 +41,11 @@ class ShowPosts extends Component
     public $image = null;
     public $identificador;      //solo creado para que se resetee y refresque el <input file> de la vista
 
-    //asigno un valor a identificador para que se refresque y actualice el <input file> de la vista
+    
     public function mount()
     {
         $this->post = new Post();               //inicializo $post como instancia del modelo Post, para no error
-        $this->identificador = rand();          //identificador aleatorio
+        $this->identificador = rand();          //asigno un valor a identificador para que se refresque y actualice el <input file> de la vista
     }
 
     //reglas de validacion de datos.
@@ -69,17 +70,29 @@ class ShowPosts extends Component
     }
 
 
-    //funcion que se ejecuta automaticamente al invocar esta clase.
+    //funcion que se ejecuta automaticamente cada vez que cambia algo del componente, una propiedad, etc.
     public function render()
     {
-    	$posts = Post::where('title', 'like', '%' . $this->search . '%')
-    				->orWhere('content', 'like', '%' . $this->search . '%')
-    				->orderBy($this->sort, $this->direction)
-    				->paginate( $this->cantidad);
-
-
+        if ( $this->readyToLoad) {
+            $posts = Post::where('title', 'like', '%' . $this->search . '%')
+                        ->orWhere('content', 'like', '%' . $this->search . '%')
+                        ->orderBy($this->sort, $this->direction)
+                        ->paginate( $this->cantidad);
+        } else {
+//            $posts = new Post();
+            $posts = [];
+        }
+        
         return view('livewire.show-posts', compact('posts'));
     }
+
+
+    //funcion que una vez mostrado el marco principal de la pagina, permite la carga de datos desde la DB
+    //mientras tanto en la vista livewire.show-posts se podrian mostrar flechas giratorias de espera de carga
+    public function loadPosts(){
+         $this->readyToLoad = true;
+    }
+
 
     public function order( $sort)
     {
