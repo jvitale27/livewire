@@ -1,4 +1,4 @@
-{{-- como este componente de livewire lo utilizo de controlador de rutas en web.php, siempre se instancia la vista principal layouts/app.blade.php antes de esta propia vista, por lo tanto estoy dentro del componente <x-app-layout> --}}
+{{-- como este componente de livewire lo utilizo de controlador de rutas en web.php, siempre se instancia la vista principal layouts/app.blade.php antes de esta propia vista, por lo tanto estoy dentro, en el {{ $slot }} del componente <x-app-layout> --}}
 {{-- Las view de Livewire SIEMPRE deben estar encerradas en un solo div padre, no puede haber mas de uno --}}
 
 <div wire:init="loadPosts">				{{-- invoco el metodo para iniciar carga de los registros de la DB --}}
@@ -9,6 +9,7 @@
         </h2>
     </x-slot>
 
+	{{-- formato de tabla extraida desde https://tailwindui.com/preview --}}
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">    
     	{{-- instancio al componente para armar la tabla --}}
 	    <x-table>
@@ -35,6 +36,7 @@
 	    		{{-- boton de crear nuevo post --}}
 	    		{{-- instancio al componente livewire app/Http/Livewire/CreatePost.php --}}
 	    		@livewire('create-post')
+
 	    	</div>
 
     		{{-- @if ($posts->count()) --}}  {{-- este no puede utilizarse en inicio retrasado readyToLoad porque no existe posts como arreglo de Post --}}

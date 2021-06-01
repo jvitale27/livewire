@@ -1,3 +1,4 @@
+{{-- como este componente de livewire es instanciado desde show-posts.blade.php y este ultimo lo utilizo de controlador de rutas en web.php, sigo estando dentro {{ $slot }} del componente <x-app-layout> --}}
 {{-- Las view de Livewire SIEMPRE deben estar encerradas en un solo div padre, no puede haber mas de uno --}}
 <div>
 	{{-- boton de comp. jetstream que ejecuta un metodo para cambiar el valor de la vble 'open' --}}
@@ -22,7 +23,7 @@
                   <span class="block sm:inline">Por favor espere hasta que se cargue la imagen</span>
                 </div>
 
-                {{-- si hay una imagen ya seleccionada, la muestro arriba desde la carpeta temporaria de livewire que es public/storage/livewire-tmp/, aunque este link apunta a http://livewire.test/livewire/preview-file/, en fin--}}
+                {{-- si hay una imagen ya seleccionada, la muestro arriba desde la carpeta temporaria de livewire que es public/storage/livewire-tmp/, aunque este link apunta a http://livewire.test/livewire/preview-file/, en fin... --}}
                 @if ($image)
                     <img src="{{ $image->temporaryUrl() }}" class="mb-4">
                 @endif
@@ -30,7 +31,7 @@
     			<x-jet-label>
     				Titulo del post
     			</x-jet-label>
-    			{{--texto cableado a la vble 'title'. defer para no renderizar con cada caracter escrito--}}
+    			{{--texto cableado a la vble 'title'. defer es para no renderizar con cada caracter escrito--}}
     			<x-jet-input type="text" class="w-full" wire:model.defer="title"></x-jet-input>
 
                 {{-- @error('title')
@@ -40,12 +41,14 @@
                 @enderror --}}
                 <x-jet-input-error for="title"></x-jet-input-error>     {{-- mediante componente jetstream --}}
 
-    			<x-jet-label class="mt-4">
+<div class="mt-4"  wire:ignore>
+    			<x-jet-label>
     				Contenido del post
     			</x-jet-label>
     			{{--'form-control' lo defini en view/css/form.css--}}
     			{{-- texto cableado a la vble 'content'. defer para no renderizar con cada caracter escrito--}}
-    			<textarea class="form-control w-full" rows="6" wire:model.defer="content"></textarea> 
+                {{-- id="contenido" es para agregarle las herram. de texto enriquecido desde el script --}}
+    			<textarea id="contenido" class="form-control w-full" rows="6" wire:model.defer="content"></textarea> 
 
                 {{-- @error('content')
                     <span>
@@ -53,7 +56,7 @@
                     </span>
                 @enderror --}}
                 <x-jet-input-error for="content"></x-jet-input-error>   {{-- mediante componente jetstream --}}
-
+</div>
                 {{-- seleccion de archivo de imagen --}}
                 <div class="mt-4">
                     {{-- el '$identificador' es para que livewire lo refresque y resetee --}}
@@ -92,4 +95,38 @@
 
     	</x-slot>
     </x-jet-dialog-modal>
+
+
+    {{-- con @push('js') incluyo codigo 'js' desde un {{ $slot }} a la entrada @stack('js') del componente ppal--}}
+    @push('js')
+
+        {{-- plugin desde CKEditor5 https://ckeditor.com/ckeditor-5/download/ para ingresar texto enriquecido--}}
+        <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+
+
+        <script>
+
+{{-- ClassicEditor
+            .create( document.querySelector( '#contenido' ) )
+            .catch( error => {
+                console.error( error );
+            } );
+ --}}            
+{{-- aplica al elemento llamado 'contenido' --}}
+
+     ClassicEditor
+       .create(document.querySelector('#contenido'))
+       .then( editor => {
+           editor.model.document.on('change:data', () => {
+           @this.set('content', editor.getData());
+          })
+       })
+       .catch(error => {
+          console.error(error);
+       });
+
+        </script>
+
+    @endpush
+
 </div>

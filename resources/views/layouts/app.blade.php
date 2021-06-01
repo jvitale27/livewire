@@ -23,6 +23,9 @@
 
         @livewireStyles                         {{-- estilos de livewire --}}
 
+        {{-- aqui puedo incluir codigo 'css' con la sintaxis push('css') de blade, desde mi {{ $slot }} principal --}}
+        @stack('css')
+
         <!-- Scripts. -->
         {{-- <script src="{{ asset('js/app.js') }}" defer></script> este funciona sin problemas--}} 
         <script src="{{ mix('js/app.js') }}" defer></script>    {{-- supuestamente va este --}}
@@ -61,6 +64,9 @@
         @if (isset($mi_js))
             {{ $mi_js }}        {{-- slot para ejecutar scripts desde cualquier plantilla --}}
         @endif
+
+        {{-- aqui puedo incluir codigo 'js' con la sintaxis push('js') de blade, desde mi {{ $slot }} principal --}}
+        @stack('js')
 
         <script>
             {{-- escucho el evento 'alert' y levanto cartel de https://sweetalert2.github.io/ --}}

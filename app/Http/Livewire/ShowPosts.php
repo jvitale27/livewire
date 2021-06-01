@@ -23,7 +23,7 @@ class ShowPosts extends Component
     //este arreglo permite definir que propiedades 'viajan' o se 'agregan' a la url de la pagina cada vez que se refresca el componente. No es necesario pero sirve para compartir la busqueda determinada con otra persona
     protected $queryString = [
         'cantidad',
-//      'cantidad' => ['except' => 10],         //excluir cuando tiene un valor predeterminado
+//      'cantidad' => ['except' => 10],  //excluir cuando tiene un valor predeterminado. Tal vez deba ser string '10'
         'sort',
 //      'sort' => ['except' => 'desc'],         //excluir cuando tiene un valor predeterminado
         'direction',
