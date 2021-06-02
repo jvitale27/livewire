@@ -26,7 +26,7 @@ class CreatePost extends Component
 	//reglas de validacion de datos
 	protected $rules = [
 		'title'   => 'required|max:100',
-		'content' => 'required|max:100',
+		'content' => 'required|max:65530',
 		'image'   => 'required|max:2048'		//2 MB
 	];
 
@@ -55,8 +55,7 @@ class CreatePost extends Component
 		]);
 
 		//reseteo todas las varibles. Se cierra el modal
-//		$this->reset(['open', 'title', 'content', 'image']);
-		$this->reset(['title', 'content', 'image']);			//sin cerrar el modal Crear post
+		$this->reset(['open', 'title', 'content', 'image']);
 
 		//asigno un valor a identificador para que se refresque y actualice el <input file> de la vista
 		$this->identificador = rand();			//identificador aleatorio
@@ -65,7 +64,8 @@ class CreatePost extends Component
 //		$this->emit('render1');						//lo envio a todos los componente que lo escuchan 
 		$this->emitTo('show-posts','render1');		//lo envio a un solo componente que lo escucha. en minuscula y con guiones
 		//emito un evento que capturo en views/layouts/app.blade.php y muestre cartel de OK
-		$this->emit('alert', 'El post fue creado con éxito');
+		$this->emit('CartelExito', 'El post fue creado con éxito');
+
 	}
 
     public function render()

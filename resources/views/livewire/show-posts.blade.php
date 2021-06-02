@@ -10,7 +10,7 @@
     </x-slot>
 
 	{{-- formato de tabla extraida desde https://tailwindui.com/preview --}}
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">    
     	{{-- instancio al componente para armar la tabla --}}
 	    <x-table>
 
@@ -42,6 +42,7 @@
     		{{-- @if ($posts->count()) --}}  {{-- este no puede utilizarse en inicio retrasado readyToLoad porque no existe posts como arreglo de Post --}}
     		@if ( count( $posts))						{{-- este metodo de php si se puede utilizar --}}
 		        <table class="min-w-full divide-y divide-gray-200">
+
 		          <thead class="bg-gray-50">
 		            <tr>
 		            {{-- a cada titulo le agrego click y el metodo para ordenar las listas --}}
@@ -97,21 +98,29 @@
 			                <div class="text-sm text-gray-900">{{ $post1->id }}</div>
 			              </td>
 			              <td class="px-6 py-4">
-			                <div class="text-sm text-gray-900">{{ $post1->title }}</div>
+			              	{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
+			                <div class="text-sm text-gray-900">{!! $post1->title !!}</div>
 			              </td>
 			              <td class="px-6 py-4">
-			                <div class="text-sm text-gray-900">{{ $post1->content }}</div>
+			              	{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
+			                <div class="text-sm text-gray-900">{!! $post1->content !!}</div>
 			              </td>
 			              {{-- boton y link editar --}}
-			              <td class="px-6 py-4 text-sm font-medium float-right">
+			              <td class="px-6 py-4 text-sm font-medium float-right flex">
 
 	    					{{-- Componente de anidamiento. Instancio reiteradas veces al componente livewire app/Http/Livewire/EditPost.php. La llave (key) debe existir y ser unica para que livewire pueda diferenciar un llamado de otro--}}
 	    					{{-- @livewire('edit-post', ['post' => $post1], key($post1->id)) --}}
 
 	    					{{-- el utilizar componentes de anidamiento no resulta optimizado, ya que se crea un componente+modal+... por cada elemento del listado de posts. Podemos hacer algo mas optimizado instanciando un metodo y pasandole la informacion del post correspondiente. Creamos un solo modal al final de este codigo --}}
 	    					{{-- en este caso instancio directamente el metodo 'edit' y le paso el 'post1' --}}
-							<a class="btn1 btn1-green" wire:click="edit( {{ $post1 }})">	{{-- clase agregada --}}
+							<a class="btn1 btn1-green" wire:click="edit( {{ $post1 }})">  {{--btn1 clase agregada--}}
 								<i class="fas fa-edit"></i>  {{-- icono de editar desde vendor/fontawesome-free/--}}
+							</a>
+
+							{{-- boton de eliminar, emite un evento llamado 'deletePost' y le paso el id 
+							lo recibe el script de abajo y muestra cartel de confirmacion--}}
+							<a class="btn1 btn1-red ml-2" wire:click="$emit('deletePost', {{ $post1->id }})">
+								<i class="fas fa-trash"></i>
 							</a>
 
 			              </td>
@@ -142,7 +151,8 @@
 =            Section comment            =
 ======================================-->
 {{-- modal que se muestra si 'open'==true. Esta cableado a la variable.
-Lo pongo aca para el caso de NO utilizar componentes de anidamiento, sino se saca de aqui --}}
+Lo pongo aca para el caso de NO utilizar componentes de anidamiento en los botones 'edit', se incluye este codigo del modal aqui y se resuelve la logica del mismo en el actual controlador ShowPosts.php
+El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsoletos--}}
     <x-jet-dialog-modal wire:model="open_edit">
 
     	<x-slot name="title">
@@ -166,28 +176,36 @@ Lo pongo aca para el caso de NO utilizar componentes de anidamiento, sino se sac
                     <img src="{{ Storage::url($post->image) }}" class="mb-4">
                 @endif
 
-    			<x-jet-label>
-    				Titulo del post
-    			</x-jet-label>
-    			{{--texto cableado a 'post.title'. defer para no renderizar con cada caracter escrito--}}
-    			<x-jet-input type="text" class="w-full" wire:model.defer="post.title"></x-jet-input>
+				<div class="mb-4">
+	    			<x-jet-label>
+	    				Titulo del post
+	    			</x-jet-label>
+	    			{{--texto cableado a 'post.title'. defer para no renderizar con cada caracter escrito--}}
+	    			<x-jet-input type="text" class="w-full" wire:model.defer="post.title"></x-jet-input>
 
-                @error('title')
-                    <span>
-                        {{ $message }}
-                    </span>
-                @enderror
-                <x-jet-input-error for="post.title"></x-jet-input-error> {{--mediante componente jetstream--}}
+	                {{-- @error('title')
+	                    <span>
+	                        {{ $message }}
+	                    </span>
+	                @enderror --}}
+	                <x-jet-input-error for="post.title"></x-jet-input-error> {{--mediante componente jetstream--}}
+	            </div>
 
-    			<x-jet-label class="mt-4">
-    				Contenido del post
-    			</x-jet-label>
-    			{{--'form-control' lo defini en view/css/form.css--}}
-    			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
-    			<textarea class="form-control w-full" rows="6" wire:model.defer="post.content">
-    				{{ $post->content }}
-    			</textarea> 
 
+				TODAVIA ESTO NO ME FUNCIONA !!!!!!!!!!
+				{{ $post->content }}
+                {{-- wire:ignore impide que todo el contenido del div se refresque en cada pasada, asi sigue funcionando el scrip de texto enriquecido. El problema es que deja de funcionar el wire:model.defer="content" pero eso lo solucionamos en el script --}}
+				<div class="mb-4" wire:ignore>
+	    			<x-jet-label>
+	    				Contenido del post
+	    			</x-jet-label>
+	    			{{--'form-control' lo defini en view/css/form.css--}}
+	    			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
+                    {{-- id="contenido_edit" es para agregarle las herram. de texto enriquecido desde el script --}}
+	    			<textarea id="contenido_edit" class="form-control w-full" rows="6" wire:model.defer="post.content">
+	    				{!! $post->content !!}		{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
+	    			</textarea> 
+	            </div>
                 {{-- @error('content')
                     <span>
                         {{ $message }}
@@ -196,7 +214,7 @@ Lo pongo aca para el caso de NO utilizar componentes de anidamiento, sino se sac
                 <x-jet-input-error for="post.content"></x-jet-input-error> {{--mediante componente jetstream--}}
 
                 {{-- seleccion de archivo de imagen --}}
-                <div class="mt-4">
+                <div>
                     {{-- el '$identificador' es para que livewire lo refresque y resetee --}}
                     <input type="file" wire:model="image" id="{{ $identificador }}" accept="image/*">
 
@@ -233,6 +251,68 @@ Lo pongo aca para el caso de NO utilizar componentes de anidamiento, sino se sac
 
     	</x-slot>
     </x-jet-dialog-modal>
+
+
+    {{-- con @push('js') incluyo codigo 'js' desde un {{ $slot }} a la entrada @stack('js') del componente ppal--}}
+    @push('js')
+
+        {{-- plugin desde CKEditor5 https://ckeditor.com/ckeditor-5/download/ para ingresar texto enriquecido--}}
+        <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
+
+        <script>
+
+             ClassicEditor
+               .create(document.querySelector('#contenido_edit'))   {{-- aplica al la clase o id='contenido_edit' --}}
+
+                {{-- esto se agrega porque al poner el wire:ignore en el div, impide que todo el contenido del div se refresque en cada pasada y deja de funcionar el wire:model.defer="post.content" pero eso lo solucionamos capturando el data del texto ingresado y asignandolo a 'post.content' --}}
+               .then( editor => {
+                   editor.model.document.on('change:data', () => {
+                        @this.set('post.content', editor.getData());
+                  })
+               })
+
+               .catch(error => {
+                  console.error(error);
+               });
+
+        </script>
+
+
+        {{-- include para incluir cualquier cuadro de dialog desde https://sweetalert2.github.io/ --}}
+		{{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
+		{{--como ya la inclui en layout/app.php, aca solo inicializo el plugin, aunque sino funciona igual... --}}
+		<script src="sweetalert2.all.min.js"></script>
+
+        <script>
+            {{-- escucho el evento 'deletePost' y la vble postId y levanto cartel de https://sweetalert2.github.io/ --}}
+            Livewire.on('deletePost', postId => {
+                {{-- cartel de alerta extraido de https://sweetalert2.github.io/ --}}
+                Swal.fire({
+                  title: 'Esta seguro?',
+                  text: "Esta accion no se podrá revertir!",
+                  icon: 'warning',                              {{-- icono --}}
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Si, eliminarlo!',
+                  cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                  	{{-- emito desde aqui otro evento que lo escucha el controlador 'show-posts' --}}
+                  	Livewire.emitTo('show-posts','delete', postId);		//lo envio a un solo componente que lo escucha. en minuscula y con guiones
+/*                    Swal.fire(
+                      'Eliminado!',
+                      'Elemento eliminado',
+                      'success'
+                    )*/
+	              }
+	            })
+            });
+
+        </script>
+
+
+    @endpush
 
 <!--====  End of Section comment  ====-->
 

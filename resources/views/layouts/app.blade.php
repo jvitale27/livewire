@@ -44,7 +44,7 @@
             <!-- Page Heading -->
             @if (isset($header))
                 <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
+                    <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
                 </header>
@@ -69,10 +69,10 @@
         @stack('js')
 
         <script>
-            {{-- escucho el evento 'alert' y levanto cartel de https://sweetalert2.github.io/ --}}
-            Livewire.on('alert', function( message){
+            {{-- escucho el evento 'CartelExito' y levanto cartel de https://sweetalert2.github.io/ --}}
+            Livewire.on('CartelExito', function( message){
                 Swal.fire(
-                    'Guardado!',
+                    'Exito!',
                     message,
                     'success'                       {{-- icono --}}
                 )

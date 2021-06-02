@@ -1,3 +1,8 @@
+<!--=====================================
+=            Section comment            =
+======================================-->
+{{-- Este codigo(vista del componente EditPost.php) SOLO se usa en el caso de UTILIZAR componentes de anidamiento en los botones 'edit', sino tanto este codigo como su controlador EditPost.php quedan obsoletos--}}
+
 {{-- Las view de Livewire SIEMPRE deben estar encerradas en un solo div padre, no puede haber mas de uno --}}
 <div>
 	{{-- ejecuta un metodo para cambiar el valor de la vble 'open' --}}
@@ -29,37 +34,41 @@
                     <img src="{{ Storage::url($post->image) }}" class="mb-4">
                 @endif
 
-    			<x-jet-label>
-    				Titulo del post
-    			</x-jet-label>
-    			{{--texto cableado a 'post.title'. defer para no renderizar con cada caracter escrito--}}
-    			<x-jet-input type="text" class="w-full" wire:model.defer="post.title"></x-jet-input>
+                <div class="mb-4">
+        			<x-jet-label>
+        				Titulo del post
+        			</x-jet-label>
+        			{{--texto cableado a 'post.title'. defer para no renderizar con cada caracter escrito--}}
+        			<x-jet-input type="text" class="w-full" wire:model.defer="post.title"></x-jet-input>
 
-                @error('title')
-                    <span>
-                        {{ $message }}
-                    </span>
-                @enderror
-                <x-jet-input-error for="post.title"></x-jet-input-error> {{--mediante componente jetstream--}}
+                    {{-- @error('title')
+                        <span>
+                            {{ $message }}
+                        </span>
+                    @enderror --}}
+                    <x-jet-input-error for="post.title"></x-jet-input-error> {{--mediante componente jetstream--}}
+                </div>
 
-    			<x-jet-label class="mt-4">
-    				Contenido del post
-    			</x-jet-label>
-    			{{--'form-control' lo defini en view/css/form.css--}}
-    			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
-    			<textarea class="form-control w-full" rows="6" wire:model.defer="post.content">
-    				{{ $post->content }}
-    			</textarea> 
+                <div class="mb-4">
+        			<x-jet-label>
+        				Contenido del post
+        			</x-jet-label>
+        			{{--'form-control' lo defini en view/css/form.css--}}
+        			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
+        			<textarea class="form-control w-full" rows="6" wire:model.defer="post.content">
+        				{{ $post->content }}
+        			</textarea> 
 
-                {{-- @error('content')
-                    <span>
-                        {{ $message }}
-                    </span>
-                @enderror --}}
-                <x-jet-input-error for="post.content"></x-jet-input-error> {{--mediante componente jetstream--}}
+                    {{-- @error('content')
+                        <span>
+                            {{ $message }}
+                        </span>
+                    @enderror --}}
+                    <x-jet-input-error for="post.content"></x-jet-input-error> {{--mediante componente jetstream--}}
+                </div>
 
                 {{-- seleccion de archivo de imagen --}}
-                <div class="mt-4">
+                <div>
                     {{-- el '$identificador' es para que livewire lo refresque y resetee --}}
                     <input type="file" wire:model="image" id="{{ $identificador }}" accept="image/*">
 

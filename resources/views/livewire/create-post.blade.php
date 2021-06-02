@@ -28,35 +28,39 @@
                     <img src="{{ $image->temporaryUrl() }}" class="mb-4">
                 @endif
 
-    			<x-jet-label>
-    				Titulo del post
-    			</x-jet-label>
-    			{{--texto cableado a la vble 'title'. defer es para no renderizar con cada caracter escrito--}}
-    			<x-jet-input type="text" class="w-full" wire:model.defer="title"></x-jet-input>
+                <div class="mb-4">
+        			<x-jet-label>
+        				Titulo del post
+        			</x-jet-label>
+        			{{--texto cableado a la vble 'title'. defer es para no renderizar con cada caracter escrito--}}
+        			<x-jet-input type="text" class="w-full" wire:model.defer="title"></x-jet-input>
 
-                {{-- @error('title')
-                    <span>
-                        {{ $message }}
-                    </span>
-                @enderror --}}
-                <x-jet-input-error for="title"></x-jet-input-error>     {{-- mediante componente jetstream --}}
+                    {{-- @error('title')
+                        <span>
+                            {{ $message }}
+                        </span>
+                    @enderror --}}
+                    <x-jet-input-error for="title"></x-jet-input-error>     {{-- mediante componente jetstream --}}
+                </div>
 
-<div class="mt-4"  wire:ignore>
-    			<x-jet-label>
-    				Contenido del post
-    			</x-jet-label>
-    			{{--'form-control' lo defini en view/css/form.css--}}
-    			{{-- texto cableado a la vble 'content'. defer para no renderizar con cada caracter escrito--}}
-                {{-- id="contenido" es para agregarle las herram. de texto enriquecido desde el script --}}
-    			<textarea id="contenido" class="form-control w-full" rows="6" wire:model.defer="content"></textarea> 
-
+                {{-- wire:ignore impide que todo el contenido del div se refresque en cada pasada, asi sigue funcionando el scrip de texto enriquecido. El problema es que deja de funcionar el wire:model.defer="content" pero eso lo solucionamos en el script --}}
+                <div wire:ignore>
+        			<x-jet-label>
+        				Contenido del post
+        			</x-jet-label>
+        			{{--'form-control' lo defini en view/css/form.css--}}
+        			{{-- texto cableado a la vble 'content'. defer para no renderizar con cada caracter escrito--}}
+                    {{-- id="contenido" es para agregarle las herram. de texto enriquecido desde el script --}}
+        			<textarea id="contenido" class="form-control w-full" rows="6" wire:model.defer="content">
+                    </textarea> 
+                </div>
                 {{-- @error('content')
                     <span>
                         {{ $message }}
                     </span>
                 @enderror --}}
                 <x-jet-input-error for="content"></x-jet-input-error>   {{-- mediante componente jetstream --}}
-</div>
+
                 {{-- seleccion de archivo de imagen --}}
                 <div class="mt-4">
                     {{-- el '$identificador' es para que livewire lo refresque y resetee --}}
@@ -103,27 +107,20 @@
         {{-- plugin desde CKEditor5 https://ckeditor.com/ckeditor-5/download/ para ingresar texto enriquecido--}}
         <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
 
-
         <script>
+             ClassicEditor
+               .create(document.querySelector('#contenido'))   {{-- aplica al elemento con clase o id='contenido' --}}
 
-{{-- ClassicEditor
-            .create( document.querySelector( '#contenido' ) )
-            .catch( error => {
-                console.error( error );
-            } );
- --}}            
-{{-- aplica al elemento llamado 'contenido' --}}
+                {{-- esto se agrega porque al poner el wire:ignore en el div, impide que todo el contenido del div se refresque en cada pasada y deja de funcionar el wire:model.defer="content" pero eso lo solucionamos capturando el data del texto ingresado y asignandolo a 'content' --}}
+               .then( editor => {
+                   editor.model.document.on('change:data', () => {
+                        @this.set('content', editor.getData());
+                  })
+               })
 
-     ClassicEditor
-       .create(document.querySelector('#contenido'))
-       .then( editor => {
-           editor.model.document.on('change:data', () => {
-           @this.set('content', editor.getData());
-          })
-       })
-       .catch(error => {
-          console.error(error);
-       });
+               .catch(error => {
+                  console.error(error);
+               });
 
         </script>
 

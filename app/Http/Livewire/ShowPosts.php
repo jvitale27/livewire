@@ -30,38 +30,13 @@ class ShowPosts extends Component
 //      'search',
     ];
 
-
-/*=============================================
-=            Section comment block            =
-=============================================*/
-//para el caso de NO utilizar componentes de anidamiento y hacer la edicion de post en este componente
-    use    WithFileUploads;            //para poder subir imagenes desde componente de Livewire
-    public $post;
-    public $open_edit = false;
-    public $image = null;
-    public $identificador;      //solo creado para que se resetee y refresque el <input file> de la vista
-
-    
-    public function mount()
-    {
-        $this->post = new Post();               //inicializo $post como instancia del modelo Post, para no error
-        $this->identificador = rand();          //asigno un valor a identificador para que se refresque y actualice el <input file> de la vista
-    }
-
-    //reglas de validacion de datos.
-    //Deben existir ademas para poder sincronizar mediante wire:model="post.title" etc., sino no funciona
-    protected $rules = [
-        'post.title'   => 'required|max:100',
-        'post.content' => 'required|max:100',
-        'post.image'   => 'required|max:2048'       //2 MB
-    ];
-
-/*=====  End of Section comment block  ======*/
-
-
-    protected $listeners = ['render1' => 'render'];     //escucho los eventos y ejecuto metodos
-                                                        //render1 lo emite CreatePost
+    //escucho los eventos y ejecuto metodos
+    protected $listeners = [
+        'render1' => 'render',              //render1 lo emite CreatePost
+        'delete'                            //si el evento y el metodo se llaman igual solo pongo uno
+   ];                                               
 //    protected $listeners = ['render'];     //si el evento y el metodo se llaman igual solo pongo uno
+
 
 //  public function updating(){       //se ejecuta automaticamente cada vez que cambia de valor cualquier propiedad
 //  public function updatingPost(){   //se ejecuta automaticamente cada vez que cambia de valor la propiedad $post
@@ -111,13 +86,48 @@ class ShowPosts extends Component
     }
 
 
+    //si le paso el id o el post es lo mismo porque laravel lo deduce
+    public function delete( Post $post)
+    {
+        Storage::delete($post->image);      //borro el archivo
+
+        $post->delete();                    //elimino el post
+
+        //emito un evento que capturo en views/layouts/app.blade.php y muestre cartel
+        $this->emit('CartelExito', 'El post se eliminó con éxito');
+    }
+
+
 /*=============================================
 =            Section comment block            =
 =============================================*/
-//para el caso de NO utilizar componentes de anidamiento y hacer la edicion de post en este componente
+//para el caso de NO utilizar componentes de anidamiento en los botones 'edit', hago la edicion de post en este componente  
+    use    WithFileUploads;            //para poder subir imagenes desde componente de Livewire
+    public $post;
+    public $open_edit = false;
+    public $image = null;
+    public $identificador;      //solo creado para que se resetee y refresque el <input file> de la vista
+
+    
+    public function mount()
+    {
+        $this->post = new Post();               //inicializo $post como instancia del modelo Post, para no error
+        $this->identificador = rand();          //asigno un valor a identificador para que se refresque y actualice el <input file> de la vista
+    }
+
+    //reglas de validacion de datos.
+    //Deben existir ademas para poder sincronizar mediante wire:model="post.title" etc., sino no funciona
+    protected $rules = [
+        'post.title'   => 'required|max:100',
+        'post.content' => 'required|max:65530',
+        'post.image'   => 'required|max:2048'       //2 MB
+    ];
+
+
     public function edit( Post $post)
     {
         $this->post = $post;
+
         $this->open_edit = true;
     }
 
@@ -155,7 +165,7 @@ class ShowPosts extends Component
 //      $this->emitTo('show-posts','render1');      //lo envio a un solo componente que lo escucha. en minuscula y con guiones
         
         //emito un evento que capturo en views/layouts/app.blade.php y muestre cartel de OK
-        $this->emit('alert', 'El post se actualizó con éxito');
+        $this->emit('CartelExito', 'El post se actualizó con éxito');
 
     }
 /*=====  End of Section comment block  ======*/

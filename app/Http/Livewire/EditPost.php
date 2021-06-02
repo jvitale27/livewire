@@ -1,5 +1,11 @@
 <?php
 
+/*=============================================
+=            Section comment block            =
+=============================================*/
+//Este codigo(controlador) y su livewire/edit-post.blade.php vista SOLO se usan en el caso de UTILIZAR componentes de anidamiento en los botones 'edit'. Sino quedan obsoleto porque todo se resuelve en el controlador ShowPosts.php
+
+
 namespace App\Http\Livewire;
 
 use App\Models\Post;
@@ -28,7 +34,7 @@ class EditPost extends Component
     //Deben existir ademas para poder sincronizar mediante wire:model="post.title" etc., sino no funciona
 	protected $rules = [
 		'post.title'   => 'required|max:100',
-		'post.content' => 'required|max:100',
+		'post.content' => 'required|max:65530',
 		'post.image'   => 'required|max:2048'		//2 MB
 	];
 
@@ -69,7 +75,7 @@ class EditPost extends Component
 //		$this->emit('render1');						//lo envio a todos los componente que lo escuchan 
 		$this->emitTo('show-posts','render1');		//lo envio a un solo componente que lo escucha. en minuscula y con guiones
 		//emito un evento que capturo en views/layouts/app.blade.php y muestre cartel de OK
-		$this->emit('alert', 'El post se actualizó con éxito');
+		$this->emit('CartelExito', 'El post se actualizó con éxito');
 
 	}
 
