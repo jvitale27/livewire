@@ -94,7 +94,7 @@ class ShowPosts extends Component
         $post->delete();                    //elimino el post
 
         //emito un evento que capturo en views/layouts/app.blade.php y muestre cartel
-        $this->emit('CartelExito', 'El post se eliminó con éxito');
+        $this->emit('CartelExito', 'Borrado!', 'El post se eliminó con éxito');
     }
 
 
@@ -165,7 +165,7 @@ class ShowPosts extends Component
 //      $this->emitTo('show-posts','render1');      //lo envio a un solo componente que lo escucha. en minuscula y con guiones
         
         //emito un evento que capturo en views/layouts/app.blade.php y muestre cartel de OK
-        $this->emit('CartelExito', 'El post se actualizó con éxito');
+        $this->emit('CartelExito', 'Actualizado!', 'El post se actualizó con éxito');
 
     }
 /*=====  End of Section comment block  ======*/

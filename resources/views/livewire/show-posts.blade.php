@@ -203,7 +203,7 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
 	    			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
                     {{-- id="contenido_edit" es para agregarle las herram. de texto enriquecido desde el script --}}
 	    			<textarea id="contenido_edit" class="form-control w-full" rows="6" wire:model.defer="post.content">
-	    				{!! $post->content !!}		{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
+	    				{{-- {!! $post->content !!} --}}		{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
 	    			</textarea> 
 	            </div>
                 {{-- @error('content')
@@ -252,6 +252,8 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
     	</x-slot>
     </x-jet-dialog-modal>
 
+<!--====  End of Section comment  ====-->
+
 
     {{-- con @push('js') incluyo codigo 'js' desde un {{ $slot }} a la entrada @stack('js') del componente ppal--}}
     @push('js')
@@ -278,13 +280,13 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
         </script>
 
 
-        {{-- include para incluir cualquier cuadro de dialog desde https://sweetalert2.github.io/ --}}
+        {{-- CDN para incluir cualquier cuadro de dialog desde https://sweetalert2.github.io/ --}}
 		{{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
-		{{--como ya la inclui en layout/app.php, aca solo inicializo el plugin, aunque sino funciona igual... --}}
-		<script src="sweetalert2.all.min.js"></script>
+		{{--como ya inclui el CDN en layout/app.php, aca ni siquiera tengo que inicializar el plugin--}}
+		{{-- <script src="sweetalert2.all.min.js"></script> --}}
 
         <script>
-            {{-- escucho el evento 'deletePost' y la vble postId y levanto cartel de https://sweetalert2.github.io/ --}}
+            {{-- escucho evento 'deletePost' y vble postId y levanto cartel de https://sweetalert2.github.io/ --}}
             Livewire.on('deletePost', postId => {
                 {{-- cartel de alerta extraido de https://sweetalert2.github.io/ --}}
                 Swal.fire({
@@ -313,7 +315,5 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
 
 
     @endpush
-
-<!--====  End of Section comment  ====-->
 
 </div>

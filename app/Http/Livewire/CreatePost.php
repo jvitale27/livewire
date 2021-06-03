@@ -64,7 +64,7 @@ class CreatePost extends Component
 //		$this->emit('render1');						//lo envio a todos los componente que lo escuchan 
 		$this->emitTo('show-posts','render1');		//lo envio a un solo componente que lo escucha. en minuscula y con guiones
 		//emito un evento que capturo en views/layouts/app.blade.php y muestre cartel de OK
-		$this->emit('CartelExito', 'El post fue creado con éxito');
+		$this->emit('CartelExito', 'Guardado!', 'El post fue creado con éxito');
 
 	}
 

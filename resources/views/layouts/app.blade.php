@@ -16,13 +16,16 @@
         {{-- iconos y estilos bajados de https://fontawesome.com/download --}}
         <link rel="stylesheet" href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}">
 
+        <!-- 'mi_css' styles -->
         {{--slot para definir estilos desde plantillas. Es para que funcione Dropzone, etc. --}}
         @if (isset($mi_css))
             {{ $mi_css }}
         @endif
 
+        <!-- Livewire styles -->
         @livewireStyles                         {{-- estilos de livewire --}}
 
+        <!-- stack 'css' styles -->
         {{-- aqui puedo incluir codigo 'css' con la sintaxis push('css') de blade, desde mi {{ $slot }} principal --}}
         @stack('css')
 
@@ -38,7 +41,7 @@
 
         <div class="min-h-screen bg-gray-100">
 
-<!-- instancio el componente de livewire 'navigation-menu' que esta en views\navigation-menu.blade.php -->
+            <!-- instancio el componente de livewire 'navigation-menu' que esta en views\navigation-menu.blade.php -->
             @livewire('navigation-menu')
 
             <!-- Page Heading -->
@@ -56,23 +59,27 @@
             </main>
         </div>
 
+        <!-- stack 'modals' -->
         @stack('modals')
 
+        <!-- Livewire scripts -->
         @livewireScripts                     {{-- scripts de livewire --}}
 
+        <!-- 'mi_js' scripts -->
         {{-- slot para ejecutar scripts desde cualquier plantilla --}}
         @if (isset($mi_js))
             {{ $mi_js }}        {{-- slot para ejecutar scripts desde cualquier plantilla --}}
         @endif
 
+        <!-- stack 'js' scripts -->
         {{-- aqui puedo incluir codigo 'js' con la sintaxis push('js') de blade, desde mi {{ $slot }} principal --}}
         @stack('js')
 
         <script>
             {{-- escucho el evento 'CartelExito' y levanto cartel de https://sweetalert2.github.io/ --}}
-            Livewire.on('CartelExito', function( message){
+            Livewire.on('CartelExito', function( title, message){
                 Swal.fire(
-                    'Exito!',
+                    title,
                     message,
                     'success'                       {{-- icono --}}
                 )
