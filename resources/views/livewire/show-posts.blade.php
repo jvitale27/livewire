@@ -201,9 +201,10 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
 	    			</x-jet-label>
 	    			{{--'form-control' lo defini en view/css/form.css--}}
 	    			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
-                    {{-- id="contenido_edit" es para agregarle las herram. de texto enriquecido desde el script --}}
-	    			<textarea id="contenido_edit" class="form-control w-full" rows="6" wire:model.defer="post.content">
-	    				{{-- {!! $post->content !!} --}}		{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
+                    {{-- id="contenido1" es para agregarle las herram. de texto enriquecido desde el script --}}
+	    			{{-- <textarea id="contenido1" class="form-control w-full" rows="6" wire:model.defer="post.content"> --}}
+	    			<textarea id="contenido1" name="contenido1" class="form-control w-full" rows="6" wire:model.defer="post.content">
+	    				{!! $post->content !!}		{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
 	    			</textarea> 
 	            </div>
                 {{-- @error('content')
@@ -264,18 +265,19 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
         <script>
 
              ClassicEditor
-               .create(document.querySelector('#contenido_edit'))   {{-- aplica al la clase o id='contenido_edit' --}}
+               .create(document.querySelector('#contenido1'))   {{-- aplica al la clase o id='contenido1' --}}
 
                 {{-- esto se agrega porque al poner el wire:ignore en el div, impide que todo el contenido del div se refresque en cada pasada y deja de funcionar el wire:model.defer="post.content" pero eso lo solucionamos capturando el data del texto ingresado y asignandolo a 'post.content' --}}
                .then( editor => {
                    editor.model.document.on('change:data', () => {
-                        @this.set('post.content', editor.getData());
-                  })
+					    @this.set('post.content', editor.getData());
+	               })
                })
 
                .catch(error => {
                   console.error(error);
                });
+
 
         </script>
 
