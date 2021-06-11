@@ -104,9 +104,6 @@
     {{-- con @push('js') incluyo codigo 'js' desde un {{ $slot }} a la entrada @stack('js') del componente ppal--}}
     @push('js')
 
-        {{-- plugin desde CKEditor5 https://ckeditor.com/ckeditor-5/download/ para ingresar texto enriquecido--}}
-        <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
-
         <script>
              ClassicEditor
                .create(document.querySelector('#contenido'))   {{-- aplica al elemento con clase o id='contenido' --}}

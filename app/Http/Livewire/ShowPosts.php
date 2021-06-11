@@ -163,7 +163,7 @@ class ShowPosts extends Component
         //emito un evento para que lo escuche el componente de livewire ShowPosts y actualice vista
 //      $this->emit('render1');                     //lo envio a todos los componente que lo escuchan 
 //      $this->emitTo('show-posts','render1');      //lo envio a un solo componente que lo escucha. en minuscula y con guiones
-        
+
         //emito un evento que capturo en views/layouts/app.blade.php y muestre cartel de OK
         $this->emit('CartelExito', 'Actualizado!', 'El post se actualizó con éxito');
 

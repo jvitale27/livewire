@@ -32,8 +32,10 @@
         <!-- Scripts. -->
         {{-- <script src="{{ asset('js/app.js') }}" defer></script> este funciona sin problemas--}} 
         <script src="{{ mix('js/app.js') }}" defer></script>    {{-- supuestamente va este --}}
-        {{-- include de cualquier cuadro de dialog desde https://sweetalert2.github.io/ --}}
+        {{-- plugin de cualquier cuadro de dialog desde https://sweetalert2.github.io/ --}}
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        {{-- plugin desde CKEditor5 https://ckeditor.com/ckeditor-5/download/ para ingresar texto enriquecido--}}
+        <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
 
     </head>
     <body class="font-sans antialiased">

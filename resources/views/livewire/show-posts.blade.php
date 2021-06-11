@@ -192,21 +192,23 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
 	            </div>
 
 
-				TODAVIA ESTO NO ME FUNCIONA !!!!!!!!!!
-				{{ $post->content }}
+				TODAVIA ESTO NO ME FUNCIONA !!!!!!!!!!<br>
+				{!! $post->content !!}
                 {{-- wire:ignore impide que todo el contenido del div se refresque en cada pasada, asi sigue funcionando el scrip de texto enriquecido. El problema es que deja de funcionar el wire:model.defer="content" pero eso lo solucionamos en el script --}}
-				<div class="mb-4" wire:ignore>
+				<div class="mb-4" wire:ignore wire:key="gggg">
 	    			<x-jet-label>
 	    				Contenido del post
 	    			</x-jet-label>
+
 	    			{{--'form-control' lo defini en view/css/form.css--}}
 	    			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
                     {{-- id="contenido1" es para agregarle las herram. de texto enriquecido desde el script --}}
 	    			{{-- <textarea id="contenido1" class="form-control w-full" rows="6" wire:model.defer="post.content"> --}}
-	    			<textarea id="contenido1" name="contenido1" class="form-control w-full" rows="6" wire:model.defer="post.content">
-	    				{!! $post->content !!}		{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
+	    			<textarea id="contenido1"  class="form-control w-full" rows="6" wire:model.defer="post.content">
+	    				{!! $post->content !!}	{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
 	    			</textarea> 
-	            </div>
+	    		</div>
+
                 {{-- @error('content')
                     <span>
                         {{ $message }}
@@ -259,28 +261,22 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
     {{-- con @push('js') incluyo codigo 'js' desde un {{ $slot }} a la entrada @stack('js') del componente ppal--}}
     @push('js')
 
-        {{-- plugin desde CKEditor5 https://ckeditor.com/ckeditor-5/download/ para ingresar texto enriquecido--}}
-        <script src="https://cdn.ckeditor.com/ckeditor5/27.1.0/classic/ckeditor.js"></script>
-
         <script>
 
-             ClassicEditor
-               .create(document.querySelector('#contenido1'))   {{-- aplica al la clase o id='contenido1' --}}
+            ClassicEditor
+            	.create(document.querySelector('#contenido1'))   {{-- aplica al la clase o id='contenido1' --}}
 
                 {{-- esto se agrega porque al poner el wire:ignore en el div, impide que todo el contenido del div se refresque en cada pasada y deja de funcionar el wire:model.defer="post.content" pero eso lo solucionamos capturando el data del texto ingresado y asignandolo a 'post.content' --}}
-               .then( editor => {
-                   editor.model.document.on('change:data', () => {
-					    @this.set('post.content', editor.getData());
-	               })
-               })
-
-               .catch(error => {
+                .then( editor => {
+	                editor.model.document.on('change:data', () => {
+						@this.set('post.content', editor.getData());
+		            })
+                })
+                .catch(error => {
                   console.error(error);
-               });
+                });
 
-
-        </script>
-
+		</script>
 
         {{-- CDN para incluir cualquier cuadro de dialog desde https://sweetalert2.github.io/ --}}
 		{{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
