@@ -1,13 +1,10 @@
-<!--=====================================
-=            Section comment            =
-======================================-->
 {{-- Este codigo(vista del componente EditPost.php) SOLO se usa en el caso de UTILIZAR componentes de anidamiento en los botones 'edit', sino tanto este codigo como su controlador EditPost.php quedan obsoletos--}}
 
 {{-- Las view de Livewire SIEMPRE deben estar encerradas en un solo div padre, no puede haber mas de uno --}}
 <div>
 	{{-- ejecuta un metodo para cambiar el valor de la vble 'open' --}}
 	<a class="btn1 btn1-green" wire:click="$set('open', true)">		{{-- clases agregadas por mi --}}
-		<i class="fas fa-edit"></i>				{{-- icono de editar desde vendor/fontawesome-free/ --}}
+		<i class="fas fa-edit mt-3"></i>				{{-- icono de editar desde vendor/fontawesome-free/ --}}
 	</a>
 
     {{-- modal que se muestra si 'open'==true. Esta cableado a la variable --}}
@@ -49,23 +46,24 @@
                     <x-jet-input-error for="post.title"></x-jet-input-error> {{--mediante componente jetstream--}}
                 </div>
 
-                <div class="mb-4">
+                <div class="mb-4" wire:ignore wire:key="OtroKeyCualquiera">
         			<x-jet-label>
         				Contenido del post
         			</x-jet-label>
         			{{--'form-control' lo defini en view/css/form.css--}}
         			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
-        			<textarea class="form-control w-full" rows="6" wire:model.defer="post.content">
-        				{{ $post->content }}
+                    <textarea class="form-control w-full" rows="6" wire:model.defer="post.content">
+        				{!! $post->content !!}
         			</textarea> 
 
-                    {{-- @error('content')
-                        <span>
-                            {{ $message }}
-                        </span>
-                    @enderror --}}
-                    <x-jet-input-error for="post.content"></x-jet-input-error> {{--mediante componente jetstream--}}
                 </div>
+
+                {{-- @error('content')
+                    <span>
+                        {{ $message }}
+                    </span>
+                @enderror --}}
+                <x-jet-input-error for="post.content"></x-jet-input-error> {{--mediante componente jetstream--}}
 
                 {{-- seleccion de archivo de imagen --}}
                 <div>

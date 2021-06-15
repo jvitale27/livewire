@@ -37,6 +37,21 @@ class CreatePost extends Component
 	}*/
 
 
+	public function iniciarModal()
+	{
+		//reseteo todas las varibles. Se cierra el modal
+		$this->reset(['title', 'content', 'image']);
+
+		//asigno un valor a identificador para que se refresque y actualice el <input file> de la vista
+		$this->identificador = rand();			//identificador aleatorio
+
+        //emito un evento para vaciar el CKEditor(campo 'content') del modal. Lo escucha el script
+        $this->emit('CompletarContent', '');
+
+        $this->open = true;
+	}
+
+
 	public function save()
 	{
 		$this->validate();			//validacion de datos segun las reglas establecidas
@@ -67,6 +82,14 @@ class CreatePost extends Component
 		$this->emit('CartelExito', 'Guardado!', 'El post fue creado con éxito');
 
 	}
+
+	//boton cancelar, limpio las variables y se cierra el modal
+	// public function cancelar()
+	// {
+	// 	//reseteo todas las varibles. Se cierra el modal
+	// 	$this->reset(['open']);
+	// }
+
 
     public function render()
     {

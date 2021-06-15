@@ -2,7 +2,9 @@
 {{-- Las view de Livewire SIEMPRE deben estar encerradas en un solo div padre, no puede haber mas de uno --}}
 <div>
 	{{-- boton de comp. jetstream que ejecuta un metodo para cambiar el valor de la vble 'open' --}}
-    <x-jet-danger-button wire:click="$set('open', true)">
+    {{-- <x-jet-danger-button wire:click="$set('open', true)"> --}}
+    {{-- mejor ejecuto un metodo donde inicializo vbles y seteo 'open' para mostrar modal --}}
+    <x-jet-danger-button wire:click="iniciarModal">
     	Crear post
     </x-jet-danger-button>
 
@@ -51,7 +53,8 @@
         			{{--'form-control' lo defini en view/css/form.css--}}
         			{{-- texto cableado a la vble 'content'. defer para no renderizar con cada caracter escrito--}}
                     {{-- id="contenido" es para agregarle las herram. de texto enriquecido desde el script --}}
-        			<textarea id="contenido" class="form-control w-full" rows="6" wire:model.defer="content">
+                    {{-- <textarea class="form-control w-full" rows="6" wire:model.defer="content"> --}}
+        			<textarea id="contenido">
                     </textarea> 
                 </div>
                 {{-- @error('content')
@@ -73,17 +76,19 @@
     	</x-slot>
 
     	<x-slot name="footer">
-    		{{-- boton de comp. jetstream que ejecuta un metodo para cambiar el valor de la vble 'open' --}}
+    		{{-- boton de comp. jetstream que cambia el valor de la vble 'open' --}}
     		<x-jet-secondary-button wire:click="$set('open', false)">
+            {{-- ejecuto metodo 'cancelar' para tambien borar vbles --}}
+           {{--  <x-jet-secondary-button wire:click="cancelar" wire:loading.attr="disabled" class="disabled:opacity-25" wire:target="cancelar"> --}}
     			Cancelar
     		</x-jet-secondary-button>
 
-    		{{-- boton de comp. jetstream que completa metodo 'save' para guardar post. --}}
+    		{{-- boton de comp. jetstream que ejecuta metodo 'save' para guardar post. --}}
             {{-- Se oculta mientras se completa el metodo 'save' --}}
     		{{-- <x-jet-danger-button wire:click="save" wire:loading.remove wire:target="save"> --}}
             {{-- cambia de color mientras se completa el metodo 'save' --}}
             {{-- <x-jet-danger-button wire:click="save" wire:loading.class="bg-blue-500" wire:target="save"> --}}
-            {{-- deshabilitado y opaco mientras se completan el metodo 'save' y la prop. 'image' --}}
+            {{-- deshabilitado y opaco mientras se completan los metodos 'save', 'cancelar' y la propiedad 'image' --}}
             <x-jet-danger-button wire:click="save" wire:loading.attr="disabled" class="disabled:opacity-25" wire:target="save, image">
     			Guardar
     		</x-jet-danger-button>
@@ -105,16 +110,20 @@
     @push('js')
 
         <script>
+            {{-- plugin desde CKEditor5 https://ckeditor.com/ckeditor-5/download/ para ingresar texto enriquecido --}}
              ClassicEditor
                .create(document.querySelector('#contenido'))   {{-- aplica al elemento con clase o id='contenido' --}}
-
                 {{-- esto se agrega porque al poner el wire:ignore en el div, impide que todo el contenido del div se refresque en cada pasada y deja de funcionar el wire:model.defer="content" pero eso lo solucionamos capturando el data del texto ingresado y asignandolo a 'content' --}}
                .then( editor => {
-                   editor.model.document.on('change:data', () => {
+                    editor.model.document.on('change:data', () => {
                         @this.set('content', editor.getData());
-                  })
+                    });
+                    {{-- escucho el evento para completar el campo del editor CKEditor con 'texto' --}}
+                    Livewire.on('CompletarContent', texto => {
+                        //console.log(texto);
+                        editor.setData( texto );
+                    });
                })
-
                .catch(error => {
                   console.error(error);
                });

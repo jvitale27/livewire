@@ -191,11 +191,8 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
 	                <x-jet-input-error for="post.title"></x-jet-input-error> {{--mediante componente jetstream--}}
 	            </div>
 
-
-				TODAVIA ESTO NO ME FUNCIONA !!!!!!!!!!<br>
-				{!! $post->content !!}
                 {{-- wire:ignore impide que todo el contenido del div se refresque en cada pasada, asi sigue funcionando el scrip de texto enriquecido. El problema es que deja de funcionar el wire:model.defer="content" pero eso lo solucionamos en el script --}}
-				<div class="mb-4" wire:ignore wire:key="gggg">
+				<div class="mb-4" wire:ignore wire:key="UnKeyCualquiera">
 	    			<x-jet-label>
 	    				Contenido del post
 	    			</x-jet-label>
@@ -204,8 +201,8 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
 	    			{{-- texto cableado a 'post.content'. defer para no renderizar con cada caracter escrito--}}
                     {{-- id="contenido1" es para agregarle las herram. de texto enriquecido desde el script --}}
 	    			{{-- <textarea id="contenido1" class="form-control w-full" rows="6" wire:model.defer="post.content"> --}}
-	    			<textarea id="contenido1"  class="form-control w-full" rows="6" wire:model.defer="post.content">
-	    				{!! $post->content !!}	{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
+	    			<textarea id="contenido1">
+	    				{{-- {!! $post->content !!}	 --}}{{-- {!! !!} formatea(escapa) texto html con caracteres --}}
 	    			</textarea> 
 	    		</div>
 
@@ -262,21 +259,26 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
     @push('js')
 
         <script>
-
+        	{{-- plugin desde CKEditor5 https://ckeditor.com/ckeditor-5/download/ para ingresar texto enriquecido --}}
             ClassicEditor
             	.create(document.querySelector('#contenido1'))   {{-- aplica al la clase o id='contenido1' --}}
-
                 {{-- esto se agrega porque al poner el wire:ignore en el div, impide que todo el contenido del div se refresque en cada pasada y deja de funcionar el wire:model.defer="post.content" pero eso lo solucionamos capturando el data del texto ingresado y asignandolo a 'post.content' --}}
                 .then( editor => {
 	                editor.model.document.on('change:data', () => {
 						@this.set('post.content', editor.getData());
-		            })
+		            });
+	                {{-- escucho el evento para completar el campo del editor CKEditor con 'texto' --}}
+		            Livewire.on('CompletarContent1', texto => {
+		            	//console.log(texto);
+		            	editor.setData( texto );
+					});
                 })
                 .catch(error => {
                   console.error(error);
                 });
 
 		</script>
+
 
         {{-- CDN para incluir cualquier cuadro de dialog desde https://sweetalert2.github.io/ --}}
 		{{-- <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}

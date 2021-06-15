@@ -126,8 +126,18 @@ class ShowPosts extends Component
 
     public function edit( Post $post)
     {
+        //reseteo 'image' por si habia seleccionado alguna imagen anteriormente
+        $this->reset(['image']);
+
+        //asigno un valor a identificador para que se refresque y actualice el <input file> de la vista
+        $this->identificador = rand();          //identificador aleatorio
+
         $this->post = $post;
 
+        //emito un evento para rellenar el CKEditor(campo 'content') del modal. Lo escucha el script
+        $this->emit('CompletarContent1', $this->post->content);
+
+        //el modal de edicion en show-posts.blade.php se muestra cuando esta variable es true
         $this->open_edit = true;
     }
 
