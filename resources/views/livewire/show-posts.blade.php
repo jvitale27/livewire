@@ -3,10 +3,10 @@
 
 <div wire:init="loadPosts">				{{-- invoco el metodo para iniciar carga de los registros de la DB --}}
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight">
             {{-- {{ __('Dashboard') }} --}}
             Listado de posts
-        </h2>
+        </h1>
     </x-slot>
 
 	{{-- formato de tabla extraida desde https://tailwindui.com/preview --}}
@@ -192,6 +192,8 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
 	            </div>
 
                 {{-- wire:ignore impide que todo el contenido del div se refresque en cada pasada, asi sigue funcionando el scrip de texto enriquecido. El problema es que deja de funcionar el wire:model.defer="content" pero eso lo solucionamos en el script --}}
+                <h2>{{  $post->content }}</h2>
+                <h2>{!! $post->content !!}</h2>
 				<div class="mb-4" wire:ignore wire:key="UnKeyCualquiera">
 	    			<x-jet-label>
 	    				Contenido del post
