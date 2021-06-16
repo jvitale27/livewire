@@ -33443,13 +33443,6 @@ select {
   background-color: rgba(16, 185, 129, var(--tw-bg-opacity));
 }
 
-h2{
-  font-weight: 700;
-  font-size: 1.875rem;
-  line-height: 2.25rem;
-  margin-bottom: 1rem;
-}
-
 @media (min-width: 640px) {
   .sm\:container {
     width: 100%;
