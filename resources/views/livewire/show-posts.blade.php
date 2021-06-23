@@ -270,7 +270,8 @@ El controlador EditPost.php y su vista livewire/edit-post.blade.php quedan obsol
 						@this.set('post.content', editor.getData());
 		            });
 	                {{-- escucho el evento para completar el campo del editor CKEditor con 'texto' --}}
-		            Livewire.on('CompletarContent1', texto => {
+		            //Livewire.on('CompletarContent1', function(texto, otroArg) {	es lo mismo que lo de abajo
+		          	Livewire.on('CompletarContent1', (texto, otroArg) => {
 		            	//console.log(texto);
 		            	editor.setData( texto );
 					});

@@ -79,6 +79,7 @@
 
         <script>
             {{-- escucho el evento 'CartelExito' y levanto cartel de https://sweetalert2.github.io/ --}}
+            //Livewire.on('CartelExito', ( title, message) => {     es lo mismo que lo de abajo
             Livewire.on('CartelExito', function( title, message){
                 Swal.fire(
                     title,

@@ -135,7 +135,7 @@ class ShowPosts extends Component
         $this->post = $post;
 
         //emito un evento para rellenar el CKEditor(campo 'content') del modal. Lo escucha el script
-        $this->emit('CompletarContent1', $this->post->content);
+        $this->emit('CompletarContent1', $this->post->content, 'nada');
 
         //el modal de edicion en show-posts.blade.php se muestra cuando esta variable es true
         $this->open_edit = true;
